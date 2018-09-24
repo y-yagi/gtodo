@@ -118,6 +118,7 @@ func run() error {
 		return errors.Wrap(err, "Unable to retrieve task lists")
 	}
 
+	due := ""
 	if len(tList.Items) > 0 {
 		for _, i := range tList.Items {
 			tasks, err := srv.Tasks.List(i.Id).MaxResults(50).Do()
@@ -128,7 +129,7 @@ func run() error {
 			fmt.Printf("## %s\n", i.Title)
 
 			for _, task := range tasks.Items {
-				due := ""
+				due = ""
 				if task.Due != "" {
 					time, _ := time.Parse(time.RFC3339, task.Due)
 					due = "(" + time.Format("2006/1/2") + ")"
