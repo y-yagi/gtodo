@@ -129,6 +129,10 @@ func run() error {
 			fmt.Printf("## %s\n", i.Title)
 
 			for _, task := range tasks.Items {
+				if task.Title == "" {
+					continue
+				}
+
 				due = ""
 				if task.Due != "" {
 					time, _ := time.Parse(time.RFC3339, task.Due)
