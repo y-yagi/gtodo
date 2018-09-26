@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
+	"github.com/urfave/cli"
 	"github.com/y-yagi/configure"
 	"golang.org/x/net/context"
 	"golang.org/x/oauth2"
@@ -92,7 +93,7 @@ func saveToken(path string, token *oauth2.Token) error {
 	return nil
 }
 
-func run() error {
+func appRun(c *cli.Context) error {
 	b, err := ioutil.ReadFile(filepath.Join(os.Getenv("HOME"), ".credentials.json"))
 	if err != nil {
 		return errors.Wrap(err, "Unable to read client secret file")
@@ -149,6 +150,16 @@ func run() error {
 	return nil
 }
 
+func run(args []string) int {
+	app := cli.NewApp()
+	app.Name = "gtodo"
+	app.Usage = "CLI for Google ToDo"
+	app.Version = "0.1.0"
+	app.Action = appRun
+
+	return msg(app.Run(args))
+}
+
 func main() {
-	os.Exit(msg(run()))
+	os.Exit(run(os.Args))
 }
