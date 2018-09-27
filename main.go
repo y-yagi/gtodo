@@ -161,6 +161,7 @@ func appRun(c *cli.Context) error {
 			}
 			table.Render()
 			table.ClearRows()
+			fmt.Fprintf(os.Stdout, "\n")
 		}
 	} else {
 		fmt.Print("No task lists found.")
