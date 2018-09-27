@@ -3,12 +3,15 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
+	"github.com/olekukonko/tablewriter"
 	"github.com/pkg/errors"
 	"github.com/urfave/cli"
 	"github.com/y-yagi/configure"
@@ -93,6 +96,12 @@ func saveToken(path string, token *oauth2.Token) error {
 	return nil
 }
 
+func showHeader(w io.Writer, header string) {
+	fmt.Fprintf(w, "─────────────────────────────────────\n")
+	fmt.Fprintf(w, "  %s\n", strings.TrimSpace(header))
+	fmt.Fprintf(w, "─────────────────────────────────────\n")
+}
+
 func appRun(c *cli.Context) error {
 	b, err := ioutil.ReadFile(filepath.Join(os.Getenv("HOME"), ".credentials.json"))
 	if err != nil {
@@ -119,29 +128,39 @@ func appRun(c *cli.Context) error {
 		return errors.Wrap(err, "Unable to retrieve task lists")
 	}
 
-	due := ""
 	if len(tList.Items) > 0 {
+		table := tablewriter.NewWriter(os.Stdout)
+		table.SetHeader([]string{"Title", "Due", "Note"})
+		table.SetBorders(tablewriter.Border{Left: true, Top: false, Right: true, Bottom: false})
+		table.SetCenterSeparator("|")
+
 		for _, i := range tList.Items {
 			tasks, err := srv.Tasks.List(i.Id).MaxResults(50).Do()
 			if err != nil {
 				return errors.Wrap(err, "Unable to retrieve tasks")
 			}
 
-			fmt.Printf("## %s\n", i.Title)
+			showHeader(os.Stdout, i.Title)
 
 			for _, task := range tasks.Items {
+				var data []string
+				var due string
+
 				if task.Title == "" {
 					continue
 				}
 
-				due = ""
+				data = append(data, task.Title)
 				if task.Due != "" {
 					time, _ := time.Parse(time.RFC3339, task.Due)
-					due = "(" + time.Format("2006/1/2") + ")"
+					due = time.Format("2006/1/2")
 				}
-				fmt.Printf("* %s %s\n", task.Title, due)
+				data = append(data, due)
+				data = append(data, task.Notes)
+				table.Append(data)
 			}
-			fmt.Printf("\n")
+			table.Render()
+			table.ClearRows()
 		}
 	} else {
 		fmt.Print("No task lists found.")
