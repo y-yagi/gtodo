@@ -97,6 +97,7 @@ func cmdAdd(c *cli.Context) error {
 	}
 
 	var task tasks.Task
+
 	prompt := promptui.Prompt{
 		Label:    "Title",
 		Validate: validate,
@@ -106,6 +107,27 @@ func cmdAdd(c *cli.Context) error {
 	if err != nil {
 		return errors.Wrap(err, "Prompt failed")
 	}
+
+	prompt.Label = "Due(yyyy-MM-dd)"
+	prompt.Validate = func(input string) error {
+		if len(input) == 0 {
+			return nil
+		}
+
+		_, err := time.Parse("2006-01-02", input)
+		if err != nil {
+			return errors.New("Invalid format")
+		}
+
+		return nil
+	}
+	due, err := prompt.Run()
+	if err != nil {
+		return errors.Wrap(err, "Prompt failed")
+	}
+
+	t, _ := time.Parse("2006-01-02", due)
+	task.Due = t.Format(time.RFC3339)
 
 	_, err = gtSrv.Tasks().Insert(taskListId, &task).Do()
 	if err != nil {
