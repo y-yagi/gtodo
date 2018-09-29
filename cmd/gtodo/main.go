@@ -11,6 +11,7 @@ import (
 	"github.com/olekukonko/tablewriter"
 	"github.com/pkg/errors"
 	"github.com/urfave/cli"
+	"github.com/y-yagi/gtodo"
 	tasks "google.golang.org/api/tasks/v1"
 )
 
@@ -51,7 +52,7 @@ func msg(err error) int {
 func cmdAdd(c *cli.Context) error {
 	var taskListId string
 
-	gtSrv, err := NewGTodoService()
+	gtSrv, err := gtodo.NewGTodoService()
 	if err != nil {
 		return err
 	}
@@ -138,7 +139,7 @@ func cmdAdd(c *cli.Context) error {
 }
 
 func appRun(c *cli.Context) error {
-	gtSrv, err := NewGTodoService()
+	gtSrv, err := gtodo.NewGTodoService()
 	if err != nil {
 		return err
 	}
