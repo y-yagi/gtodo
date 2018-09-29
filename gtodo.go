@@ -16,22 +16,23 @@ import (
 	tasks "google.golang.org/api/tasks/v1"
 )
 
-// GTodoService is a todo module.
-type GTodoService struct {
-	Service *tasks.Service
+// Service is a todo module.
+type Service struct {
+	taskService *tasks.Service
 }
 
-func NewGTodoService() (*GTodoService, error) {
-	gt := &GTodoService{}
+// NewService create a new service.
+func NewService() (*Service, error) {
+	srv := &Service{}
 
-	if err := gt.buildTaskService(); err != nil {
+	if err := srv.buildTaskService(); err != nil {
 		return nil, err
 	}
 
-	return gt, nil
+	return srv, nil
 }
 
-func (gt *GTodoService) buildTaskService() error {
+func (srv *Service) buildTaskService() error {
 	b, err := ioutil.ReadFile(filepath.Join(os.Getenv("HOME"), ".credentials.json"))
 	if err != nil {
 		return errors.Wrap(err, "Unable to read client secret file")
@@ -42,12 +43,12 @@ func (gt *GTodoService) buildTaskService() error {
 		return errors.Wrap(err, "Unable to parse client secret file to config")
 	}
 
-	client, err := gt.getClient(config)
+	client, err := srv.getClient(config)
 	if err != nil {
 		return errors.Wrap(err, "Unable to get Client")
 	}
 
-	gt.Service, err = tasks.New(client)
+	srv.taskService, err = tasks.New(client)
 	if err != nil {
 		return errors.Wrap(err, "Unable to retrieve tasks Client")
 	}
@@ -55,32 +56,34 @@ func (gt *GTodoService) buildTaskService() error {
 	return nil
 }
 
-func (gt *GTodoService) Tasklists() *tasks.TasklistsService {
-	return gt.Service.Tasklists
+// Tasklists return TasklistsService.
+func (srv *Service) Tasklists() *tasks.TasklistsService {
+	return srv.taskService.Tasklists
 }
 
-func (gt *GTodoService) Tasks() *tasks.TasksService {
-	return gt.Service.Tasks
+// Tasks return TasksService.
+func (srv *Service) Tasks() *tasks.TasksService {
+	return srv.taskService.Tasks
 }
 
-func (gt *GTodoService) getClient(config *oauth2.Config) (*http.Client, error) {
-	tokFile, err := gt.tokenFile()
+func (srv *Service) getClient(config *oauth2.Config) (*http.Client, error) {
+	tokFile, err := srv.tokenFile()
 	if err != nil {
 		return nil, err
 	}
 
-	tok, err := gt.tokenFromFile(tokFile)
+	tok, err := srv.tokenFromFile(tokFile)
 	if err != nil {
-		if tok, err = gt.getTokenFromWeb(config); err != nil {
+		if tok, err = srv.getTokenFromWeb(config); err != nil {
 			return nil, err
 		}
-		gt.saveToken(tokFile, tok)
+		srv.saveToken(tokFile, tok)
 	}
 
 	return config.Client(context.Background(), tok), err
 }
 
-func (gt *GTodoService) tokenFile() (string, error) {
+func (srv *Service) tokenFile() (string, error) {
 	dir := configure.ConfigDir("gtodo")
 	if err := os.MkdirAll(dir, 0700); err != nil {
 		return "", errors.Wrap(err, "Unable to open file")
@@ -89,7 +92,7 @@ func (gt *GTodoService) tokenFile() (string, error) {
 	return filepath.Join(dir, "token.json"), nil
 }
 
-func (gt *GTodoService) getTokenFromWeb(config *oauth2.Config) (*oauth2.Token, error) {
+func (srv *Service) getTokenFromWeb(config *oauth2.Config) (*oauth2.Token, error) {
 	authURL := config.AuthCodeURL("state-token", oauth2.AccessTypeOffline)
 	fmt.Printf("Go to the following link in your browser then type the "+
 		"authorization code: \n%v\n", authURL)
@@ -106,7 +109,7 @@ func (gt *GTodoService) getTokenFromWeb(config *oauth2.Config) (*oauth2.Token, e
 	return tok, nil
 }
 
-func (gt *GTodoService) tokenFromFile(file string) (*oauth2.Token, error) {
+func (srv *Service) tokenFromFile(file string) (*oauth2.Token, error) {
 	f, err := os.Open(file)
 	if err != nil {
 		return nil, err
@@ -118,7 +121,7 @@ func (gt *GTodoService) tokenFromFile(file string) (*oauth2.Token, error) {
 	return tok, err
 }
 
-func (gt *GTodoService) saveToken(path string, token *oauth2.Token) error {
+func (srv *Service) saveToken(path string, token *oauth2.Token) error {
 	fmt.Printf("Saving credential file to: %s\n", path)
 	f, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0600)
 	if err != nil {

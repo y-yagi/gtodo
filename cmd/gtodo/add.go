@@ -11,12 +11,12 @@ import (
 )
 
 func cmdAdd(c *cli.Context) error {
-	gtSrv, err := gtodo.NewGTodoService()
+	srv, err := gtodo.NewService()
 	if err != nil {
 		return err
 	}
 
-	taskListId, err := selectTaskList(gtSrv)
+	taskListID, err := selectTaskList(srv)
 	if err != nil {
 		return err
 	}
@@ -26,7 +26,7 @@ func cmdAdd(c *cli.Context) error {
 		return err
 	}
 
-	_, err = gtSrv.Tasks().Insert(taskListId, &task).Do()
+	_, err = srv.Tasks().Insert(taskListID, &task).Do()
 	if err != nil {
 		return errors.Wrap(err, "Task insert failed")
 	}
@@ -34,10 +34,10 @@ func cmdAdd(c *cli.Context) error {
 	return nil
 }
 
-func selectTaskList(gtSrv *gtodo.GTodoService) (string, error) {
-	var taskListId string
+func selectTaskList(srv *gtodo.Service) (string, error) {
+	var taskListID string
 
-	tList, err := gtSrv.Tasklists().List().MaxResults(10).Do()
+	tList, err := srv.Tasklists().List().MaxResults(10).Do()
 	if err != nil {
 		return "", errors.Wrap(err, "Unable to retrieve task lists")
 	}
@@ -47,15 +47,15 @@ func selectTaskList(gtSrv *gtodo.GTodoService) (string, error) {
 	}
 
 	if len(tList.Items) == 1 {
-		taskListId = tList.Items[0].Id
+		taskListID = tList.Items[0].Id
 	} else {
 		var selectItems []string
 		// TODO: Add care about the same task list name
-		titleListWithId := map[string]string{}
+		titleListWithID := map[string]string{}
 
 		for _, i := range tList.Items {
 			selectItems = append(selectItems, i.Title)
-			titleListWithId[i.Title] = i.Id
+			titleListWithID[i.Title] = i.Id
 		}
 
 		pSelect := promptui.Select{
@@ -67,10 +67,10 @@ func selectTaskList(gtSrv *gtodo.GTodoService) (string, error) {
 		if err != nil {
 			return "", errors.Wrap(err, "Prompt canceled")
 		}
-		taskListId = titleListWithId[result]
+		taskListID = titleListWithID[result]
 	}
 
-	return taskListId, nil
+	return taskListID, nil
 }
 
 func buildTask(task *tasks.Task) error {

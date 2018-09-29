@@ -48,12 +48,12 @@ func msg(err error) int {
 }
 
 func appRun(c *cli.Context) error {
-	gtSrv, err := gtodo.NewGTodoService()
+	srv, err := gtodo.NewService()
 	if err != nil {
 		return err
 	}
 
-	tList, err := gtSrv.Tasklists().List().MaxResults(10).Do()
+	tList, err := srv.Tasklists().List().MaxResults(10).Do()
 	if err != nil {
 		return errors.Wrap(err, "Unable to retrieve task lists")
 	}
@@ -65,7 +65,7 @@ func appRun(c *cli.Context) error {
 		table.SetCenterSeparator("|")
 
 		for _, i := range tList.Items {
-			tasks, err := gtSrv.Tasks().List(i.Id).MaxResults(50).Do()
+			tasks, err := srv.Tasks().List(i.Id).MaxResults(50).Do()
 			if err != nil {
 				return errors.Wrap(err, "Unable to retrieve tasks")
 			}
