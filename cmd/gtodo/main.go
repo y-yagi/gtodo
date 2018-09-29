@@ -7,12 +7,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/manifoldco/promptui"
 	"github.com/olekukonko/tablewriter"
 	"github.com/pkg/errors"
 	"github.com/urfave/cli"
 	"github.com/y-yagi/gtodo"
-	tasks "google.golang.org/api/tasks/v1"
 )
 
 func main() {
@@ -47,95 +45,6 @@ func msg(err error) int {
 		return 1
 	}
 	return 0
-}
-
-func cmdAdd(c *cli.Context) error {
-	var taskListId string
-
-	gtSrv, err := gtodo.NewGTodoService()
-	if err != nil {
-		return err
-	}
-
-	tList, err := gtSrv.Tasklists().List().MaxResults(10).Do()
-	if err != nil {
-		return errors.Wrap(err, "Unable to retrieve task lists")
-	}
-
-	if len(tList.Items) == 0 {
-		return errors.New("No task lists found")
-	}
-
-	if len(tList.Items) == 1 {
-		taskListId = tList.Items[0].Id
-	} else {
-		var selectItems []string
-		// TODO: Add care about the same task list name
-		titleListWithId := map[string]string{}
-
-		for _, i := range tList.Items {
-			selectItems = append(selectItems, i.Title)
-			titleListWithId[i.Title] = i.Id
-		}
-
-		pSelect := promptui.Select{
-			Label: "Select Task List",
-			Items: selectItems,
-		}
-		_, result, err := pSelect.Run()
-
-		if err != nil {
-			return errors.Wrap(err, "Prompt failed")
-		}
-		taskListId = titleListWithId[result]
-	}
-
-	validate := func(input string) error {
-		if len(input) == 0 {
-			return errors.New("Title can not be empty")
-		}
-		return nil
-	}
-
-	var task tasks.Task
-
-	prompt := promptui.Prompt{
-		Label:    "Title",
-		Validate: validate,
-	}
-
-	task.Title, err = prompt.Run()
-	if err != nil {
-		return errors.Wrap(err, "Prompt failed")
-	}
-
-	prompt.Label = "Due(yyyy-MM-dd)"
-	prompt.Validate = func(input string) error {
-		if len(input) == 0 {
-			return nil
-		}
-
-		_, err := time.Parse("2006-01-02", input)
-		if err != nil {
-			return errors.New("Invalid format")
-		}
-
-		return nil
-	}
-	due, err := prompt.Run()
-	if err != nil {
-		return errors.Wrap(err, "Prompt failed")
-	}
-
-	t, _ := time.Parse("2006-01-02", due)
-	task.Due = t.Format(time.RFC3339)
-
-	_, err = gtSrv.Tasks().Insert(taskListId, &task).Do()
-	if err != nil {
-		return errors.Wrap(err, "Task insert failed")
-	}
-
-	return nil
 }
 
 func appRun(c *cli.Context) error {
