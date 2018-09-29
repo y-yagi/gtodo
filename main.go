@@ -1,25 +1,42 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
-	"net/http"
 	"os"
-	"path/filepath"
 	"strings"
 	"time"
 
 	"github.com/olekukonko/tablewriter"
 	"github.com/pkg/errors"
 	"github.com/urfave/cli"
-	"github.com/y-yagi/configure"
-	"golang.org/x/net/context"
-	"golang.org/x/oauth2"
-	"golang.org/x/oauth2/google"
-	"google.golang.org/api/tasks/v1"
 )
+
+func main() {
+	os.Exit(run(os.Args))
+}
+
+func run(args []string) int {
+	app := cli.NewApp()
+	app.Name = "gtodo"
+	app.Usage = "CLI for Google ToDo"
+	app.Version = "0.1.0"
+	app.Action = appRun
+	app.Commands = commands()
+
+	return msg(app.Run(args))
+}
+
+func commands() []cli.Command {
+	return []cli.Command{
+		cli.Command{
+			Name:    "add",
+			Aliases: []string{"a"},
+			Usage:   "add a new todo",
+			Action:  cmdAdd,
+		},
+	}
+}
 
 func msg(err error) int {
 	if err != nil {
@@ -29,70 +46,8 @@ func msg(err error) int {
 	return 0
 }
 
-func tokenFile() (string, error) {
-	dir := configure.ConfigDir("gtodo")
-	if err := os.MkdirAll(dir, 0700); err != nil {
-		return "", errors.Wrap(err, "Unable to open file")
-	}
-
-	return filepath.Join(dir, "token.json"), nil
-}
-
-func getClient(config *oauth2.Config) (*http.Client, error) {
-	tokFile, err := tokenFile()
-	if err != nil {
-		return nil, err
-	}
-
-	tok, err := tokenFromFile(tokFile)
-	if err != nil {
-		if tok, err = getTokenFromWeb(config); err != nil {
-			return nil, err
-		}
-		saveToken(tokFile, tok)
-	}
-
-	return config.Client(context.Background(), tok), err
-}
-
-func getTokenFromWeb(config *oauth2.Config) (*oauth2.Token, error) {
-	authURL := config.AuthCodeURL("state-token", oauth2.AccessTypeOffline)
-	fmt.Printf("Go to the following link in your browser then type the "+
-		"authorization code: \n%v\n", authURL)
-
-	var authCode string
-	if _, err := fmt.Scan(&authCode); err != nil {
-		return nil, errors.Wrap(err, "Unable to read authorization code")
-	}
-
-	tok, err := config.Exchange(context.TODO(), authCode)
-	if err != nil {
-		return nil, errors.Wrap(err, "Unable to retrieve token from web")
-	}
-	return tok, nil
-}
-
-func tokenFromFile(file string) (*oauth2.Token, error) {
-	f, err := os.Open(file)
-	if err != nil {
-		return nil, err
-	}
-	defer f.Close()
-
-	tok := &oauth2.Token{}
-	err = json.NewDecoder(f).Decode(tok)
-	return tok, err
-}
-
-func saveToken(path string, token *oauth2.Token) error {
-	fmt.Printf("Saving credential file to: %s\n", path)
-	f, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0600)
-	if err != nil {
-		return errors.Wrap(err, "Unable to cache oauth token")
-	}
-	defer f.Close()
-	json.NewEncoder(f).Encode(token)
-
+func cmdAdd(c *cli.Context) error {
+	fmt.Println("added task: ", c.Args().First())
 	return nil
 }
 
@@ -103,27 +58,12 @@ func showHeader(w io.Writer, header string) {
 }
 
 func appRun(c *cli.Context) error {
-	b, err := ioutil.ReadFile(filepath.Join(os.Getenv("HOME"), ".credentials.json"))
+	gtSrv, err := NewGTodoService()
 	if err != nil {
-		return errors.Wrap(err, "Unable to read client secret file")
+		return err
 	}
 
-	config, err := google.ConfigFromJSON(b, tasks.TasksScope)
-	if err != nil {
-		return errors.Wrap(err, "Unable to parse client secret file to config")
-	}
-
-	client, err := getClient(config)
-	if err != nil {
-		return errors.Wrap(err, "Unable to get Client")
-	}
-
-	srv, err := tasks.New(client)
-	if err != nil {
-		return errors.Wrap(err, "Unable to retrieve tasks Client")
-	}
-
-	tList, err := srv.Tasklists.List().MaxResults(10).Do()
+	tList, err := gtSrv.Tasklists().List().MaxResults(10).Do()
 	if err != nil {
 		return errors.Wrap(err, "Unable to retrieve task lists")
 	}
@@ -135,7 +75,7 @@ func appRun(c *cli.Context) error {
 		table.SetCenterSeparator("|")
 
 		for _, i := range tList.Items {
-			tasks, err := srv.Tasks.List(i.Id).MaxResults(50).Do()
+			tasks, err := gtSrv.Tasks().List(i.Id).MaxResults(50).Do()
 			if err != nil {
 				return errors.Wrap(err, "Unable to retrieve tasks")
 			}
@@ -168,18 +108,4 @@ func appRun(c *cli.Context) error {
 	}
 
 	return nil
-}
-
-func run(args []string) int {
-	app := cli.NewApp()
-	app.Name = "gtodo"
-	app.Usage = "CLI for Google ToDo"
-	app.Version = "0.1.0"
-	app.Action = appRun
-
-	return msg(app.Run(args))
-}
-
-func main() {
-	os.Exit(run(os.Args))
 }
