@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/manifoldco/promptui"
 	"github.com/olekukonko/tablewriter"
 	"github.com/pkg/errors"
 	"github.com/urfave/cli"
@@ -35,6 +36,12 @@ func commands() []cli.Command {
 			Aliases: []string{"a"},
 			Usage:   "add a new todo",
 			Action:  cmdAdd,
+		},
+		cli.Command{
+			Name:    "delete",
+			Aliases: []string{"d"},
+			Usage:   "delete a todo",
+			Action:  cmdDelete,
 		},
 	}
 }
@@ -104,4 +111,43 @@ func showHeader(w io.Writer, header string) {
 	fmt.Fprintf(w, "─────────────────────────────────────\n")
 	fmt.Fprintf(w, "  %s\n", strings.TrimSpace(header))
 	fmt.Fprintf(w, "─────────────────────────────────────\n")
+}
+
+func selectTaskList(srv *gtodo.Service) (string, error) {
+	var taskListID string
+
+	tList, err := srv.Tasklists().List().MaxResults(10).Do()
+	if err != nil {
+		return "", errors.Wrap(err, "Unable to retrieve task lists")
+	}
+
+	if len(tList.Items) == 0 {
+		return "", errors.New("No task lists found")
+	}
+
+	if len(tList.Items) == 1 {
+		taskListID = tList.Items[0].Id
+	} else {
+		var selectItems []string
+		// TODO: Add care about the same task list name
+		titleListWithID := map[string]string{}
+
+		for _, i := range tList.Items {
+			selectItems = append(selectItems, i.Title)
+			titleListWithID[i.Title] = i.Id
+		}
+
+		pSelect := promptui.Select{
+			Label: "Select Task List",
+			Items: selectItems,
+		}
+		_, result, err := pSelect.Run()
+
+		if err != nil {
+			return "", errors.Wrap(err, "Prompt canceled")
+		}
+		taskListID = titleListWithID[result]
+	}
+
+	return taskListID, nil
 }
