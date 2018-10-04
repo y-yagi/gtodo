@@ -78,5 +78,14 @@ func buildTask(task *tasks.Task) error {
 		task.Due = t.Format(time.RFC3339)
 	}
 
+	prompt.Label = "Notes"
+	prompt.Validate = func(input string) error {
+		return nil
+	}
+	task.Notes, err = prompt.Run()
+	if err != nil {
+		return errors.Wrap(err, "Prompt failed")
+	}
+
 	return nil
 }
