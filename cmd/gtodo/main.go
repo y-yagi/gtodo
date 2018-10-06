@@ -12,6 +12,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/urfave/cli"
 	"github.com/y-yagi/gtodo"
+	tasks "google.golang.org/api/tasks/v1"
 )
 
 func main() {
@@ -42,6 +43,12 @@ func commands() []cli.Command {
 			Aliases: []string{"d"},
 			Usage:   "delete a todo",
 			Action:  cmdDelete,
+		},
+		cli.Command{
+			Name:    "update",
+			Aliases: []string{"u"},
+			Usage:   "update a todo",
+			Action:  cmdUpdate,
 		},
 	}
 }
@@ -90,7 +97,7 @@ func appRun(c *cli.Context) error {
 				data = append(data, task.Title)
 				if task.Due != "" {
 					time, _ := time.Parse(time.RFC3339, task.Due)
-					due = time.Format("2006/1/2")
+					due = time.Format("2006-1-2")
 				}
 				data = append(data, due)
 				data = append(data, task.Notes)
@@ -150,4 +157,112 @@ func selectTaskList(srv *gtodo.Service) (string, error) {
 	}
 
 	return taskListID, nil
+}
+
+func selectTask(srv *gtodo.Service, taskListID string) (tasks.Task, error) {
+	var task tasks.Task
+
+	taskSrv, err := srv.Tasks().List(taskListID).MaxResults(50).Do()
+	if err != nil {
+		return task, errors.Wrap(err, "Unable to retrieve tasks")
+	}
+
+	if len(taskSrv.Items) == 0 {
+		return task, errors.New("No tasks found")
+	}
+
+	if len(taskSrv.Items) == 1 {
+		task.Id = taskSrv.Items[0].Id
+	} else {
+		var selectItems []string
+		titleListWithID := map[string]*tasks.Task{}
+
+		for _, t := range taskSrv.Items {
+			if t.Title == "" {
+				continue
+			}
+			selectItems = append(selectItems, t.Title)
+			titleListWithID[t.Title] = t
+		}
+
+		pSelect := promptui.Select{
+			Label: "Select Task",
+			Items: selectItems,
+		}
+
+		_, result, err := pSelect.Run()
+		if err != nil {
+			return task, errors.Wrap(err, "Prompt canceled")
+		}
+		task = *titleListWithID[result]
+	}
+
+	return task, nil
+}
+
+func buildTask(task *tasks.Task) error {
+	var err error
+
+	validate := func(input string) error {
+		if len(input) == 0 {
+			return errors.New("Title can not be empty")
+		}
+		return nil
+	}
+
+	prompt := promptui.Prompt{
+		Label:     "Title",
+		Default:   task.Title,
+		Validate:  validate,
+		AllowEdit: true,
+	}
+
+	task.Title, err = prompt.Run()
+	if err != nil {
+		return errors.Wrap(err, "Prompt canceled")
+	}
+
+	prompt.Label = "Due(yyyy-MM-dd)"
+	if len(task.Due) != 0 {
+		time, _ := time.Parse(time.RFC3339, task.Due)
+		due := time.Format("2006-1-2")
+		prompt.Default = due
+	} else {
+		prompt.Default = ""
+	}
+
+	prompt.Validate = func(input string) error {
+		if len(input) == 0 {
+			return nil
+		}
+
+		_, err := time.Parse("2006-01-02", input)
+		if err != nil {
+			return errors.New("Invalid format")
+		}
+
+		return nil
+	}
+
+	due, err := prompt.Run()
+	if err != nil {
+		return errors.Wrap(err, "Prompt failed")
+	}
+
+	if len(due) != 0 {
+		t, _ := time.Parse("2006-01-02", due)
+		task.Due = t.Format(time.RFC3339)
+	}
+
+	prompt.Label = "Notes"
+	prompt.Default = task.Notes
+	prompt.Validate = func(input string) error {
+		return nil
+	}
+	task.Notes, err = prompt.Run()
+	if err != nil {
+		return errors.Wrap(err, "Prompt failed")
+	}
+
+	return nil
 }
