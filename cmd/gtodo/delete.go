@@ -58,14 +58,14 @@ func selectTask(srv *gtodo.Service, taskListID string) (tasks.Task, error) {
 		task.Id = taskSrv.Items[0].Id
 	} else {
 		var selectItems []string
-		titleListWithID := map[string]string{}
+		titleListWithID := map[string]*tasks.Task{}
 
 		for _, t := range taskSrv.Items {
 			if t.Title == "" {
 				continue
 			}
 			selectItems = append(selectItems, t.Title)
-			titleListWithID[t.Title] = t.Id
+			titleListWithID[t.Title] = t
 		}
 
 		pSelect := promptui.Select{
@@ -77,8 +77,7 @@ func selectTask(srv *gtodo.Service, taskListID string) (tasks.Task, error) {
 		if err != nil {
 			return task, errors.Wrap(err, "Prompt canceled")
 		}
-		task.Id = titleListWithID[result]
-		task.Title = result
+		task = *titleListWithID[result]
 	}
 
 	return task, nil
