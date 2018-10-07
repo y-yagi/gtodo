@@ -39,6 +39,12 @@ func commands() []cli.Command {
 			Action:  cmdAdd,
 		},
 		cli.Command{
+			Name:    "complete",
+			Aliases: []string{"c"},
+			Usage:   "complete a todo",
+			Action:  cmdComplete,
+		},
+		cli.Command{
 			Name:    "delete",
 			Aliases: []string{"d"},
 			Usage:   "delete a todo",
