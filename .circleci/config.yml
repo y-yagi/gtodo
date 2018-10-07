@@ -14,5 +14,14 @@ jobs:
           command: |
             go get -u github.com/golang/lint/golint
             golint -set_exit_status ./...
+      - Run:
+          name: Run go mod
+          command: |
+            GO111MODULE=on go mod download
+            GO111MODULE=on go mod vendor
+
+      - run:
+          name: Run megacheck
+          command: |
             go get -u honnef.co/go/tools/cmd/megacheck
-            megacheck ./...
+            GO111MODULE=off megacheck ./...
