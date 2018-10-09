@@ -12,6 +12,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/urfave/cli"
 	"github.com/y-yagi/gtodo"
+	"github.com/y-yagi/gtodo/cmd/internal/tasklist"
 	tasks "google.golang.org/api/tasks/v1"
 )
 
@@ -55,6 +56,22 @@ func commands() []cli.Command {
 			Aliases: []string{"u"},
 			Usage:   "update a todo",
 			Action:  cmdUpdate,
+		},
+		cli.Command{
+			Name:  "tasklist",
+			Usage: "action for tasklist",
+			Subcommands: []cli.Command{
+				{
+					Name:   "add",
+					Usage:  "add a new tasklist",
+					Action: tasklist.Add,
+				},
+				{
+					Name:   "delete",
+					Usage:  "delete a tasklist",
+					Action: tasklist.Delete,
+				},
+			},
 		},
 	}
 }
