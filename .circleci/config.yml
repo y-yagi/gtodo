@@ -17,8 +17,8 @@ jobs:
       - Run:
           name: Run go mod
           command: |
-            GO111MODULE=on go mod download
-            GO111MODULE=on go mod vendor
+            go mod download
+            go mod vendor
 
       - run:
           name: Run megacheck
