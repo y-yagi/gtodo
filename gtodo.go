@@ -33,7 +33,7 @@ func NewService() (*Service, error) {
 }
 
 func (srv *Service) buildTaskService() error {
-	b, err := ioutil.ReadFile(credentialsPath())
+	b, err := ioutil.ReadFile(srv.credentialsPath())
 	if err != nil {
 		return errors.Wrap(err, "Unable to read client secret file")
 	}
@@ -133,7 +133,7 @@ func (srv *Service) saveToken(path string, token *oauth2.Token) error {
 	return nil
 }
 
-func credentialsPath() string {
+func (srv *Service) credentialsPath() string {
 	if path := os.Getenv("CREDENTIALS"); len(path) != 0 {
 		return path
 	}
