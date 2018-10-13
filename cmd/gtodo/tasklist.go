@@ -1,4 +1,4 @@
-package tasklist
+package main
 
 import (
 	"github.com/manifoldco/promptui"
@@ -8,8 +8,7 @@ import (
 	tasks "google.golang.org/api/tasks/v1"
 )
 
-// Add create a new TaskList.
-func Add(c *cli.Context) error {
+func addTasklist(c *cli.Context) error {
 	srv, err := gtodo.NewService()
 	if err != nil {
 		return err
@@ -27,8 +26,7 @@ func Add(c *cli.Context) error {
 	return nil
 }
 
-// Delete remove a TaskList.
-func Delete(c *cli.Context) error {
+func deleteTasklist(c *cli.Context) error {
 	srv, err := gtodo.NewService()
 	if err != nil {
 		return err
