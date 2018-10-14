@@ -1,3 +1,4 @@
 cmd/gtodo/gtodo
 credentials.json
 token.json
+dist
