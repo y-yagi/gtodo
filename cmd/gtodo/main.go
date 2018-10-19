@@ -82,6 +82,11 @@ func msg(err error) int {
 }
 
 func appRun(c *cli.Context) error {
+	if c.NArg() != 0 {
+		cli.ShowAppHelp(c)
+		return nil
+	}
+
 	srv, err := gtodo.NewService()
 	if err != nil {
 		return err
