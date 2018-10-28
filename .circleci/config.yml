@@ -46,6 +46,7 @@ workflows:
   build:
     jobs:
       - build
+      - modules-update
   scheduled-workflow:
     triggers:
       - schedule:
