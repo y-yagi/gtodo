@@ -16,12 +16,13 @@ require (
 	github.com/olekukonko/tablewriter v0.0.1
 	github.com/pkg/errors v0.8.0
 	github.com/urfave/cli v1.20.0
+	github.com/y-yagi/ci-modules-update v0.0.0-20181028233520-12c5ff425996 // indirect
 	github.com/y-yagi/configure v0.0.0-20181002081935-8f74636cf485
-	golang.org/x/net v0.0.0-20181023162649-9b4f9f5ad519 // indirect
+	golang.org/x/net v0.0.0-20181029044818-c44066c5c816 // indirect
 	golang.org/x/oauth2 v0.0.0-20181017192945-9dcd33a902f4
 	golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f // indirect
-	golang.org/x/sys v0.0.0-20181026203630-95b1ffbd15a5 // indirect
-	google.golang.org/api v0.0.0-20181026000445-511bab8e55de
+	golang.org/x/sys v0.0.0-20181029174526-d69651ed3497 // indirect
+	google.golang.org/api v0.0.0-20181029172801-aff2d7231e3c
 	google.golang.org/appengine v1.2.0 // indirect
 	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
 )
