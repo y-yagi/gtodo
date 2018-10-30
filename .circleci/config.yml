@@ -38,7 +38,7 @@ jobs:
       - run:
           name: Run ci-modules-update
           command: |
-            go get -u github.com/y-yagi/ci-modules-update
+            GO111MODULE=off go get -u github.com/y-yagi/ci-modules-update
             ci-modules-update -u y-yagi -r y-yagi/gtodo
 
 workflows:
