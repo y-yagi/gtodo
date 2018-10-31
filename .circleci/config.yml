@@ -39,6 +39,7 @@ jobs:
           name: Run ci-modules-update
           command: |
             GO111MODULE=off go get -u github.com/y-yagi/ci-modules-update
+            ci-modules-update -v
             ci-modules-update -u y-yagi -r y-yagi/gtodo
 
 workflows:
@@ -46,6 +47,7 @@ workflows:
   build:
     jobs:
       - build
+      - modules-update
   scheduled-workflow:
     triggers:
       - schedule:
