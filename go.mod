@@ -1,7 +1,7 @@
 module github.com/y-yagi/gtodo
 
 require (
-	cloud.google.com/go v0.31.0 // indirect
+	cloud.google.com/go v0.32.0 // indirect
 	github.com/chzyer/logex v1.1.10 // indirect
 	github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e // indirect
 	github.com/chzyer/test v0.0.0-20180213035817-a1ea475d72b1 // indirect
@@ -17,11 +17,11 @@ require (
 	github.com/pkg/errors v0.8.0
 	github.com/urfave/cli v1.20.0
 	github.com/y-yagi/configure v0.0.0-20181002081935-8f74636cf485
-	golang.org/x/net v0.0.0-20181023162649-9b4f9f5ad519 // indirect
-	golang.org/x/oauth2 v0.0.0-20181017192945-9dcd33a902f4
-	golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f // indirect
-	golang.org/x/sys v0.0.0-20181026203630-95b1ffbd15a5 // indirect
-	google.golang.org/api v0.0.0-20181026000445-511bab8e55de
-	google.golang.org/appengine v1.2.0 // indirect
+	golang.org/x/net v0.0.0-20181108082009-03003ca0c849 // indirect
+	golang.org/x/oauth2 v0.0.0-20181106182150-f42d05182288
+	golang.org/x/sync v0.0.0-20181108010431-42b317875d0f // indirect
+	golang.org/x/sys v0.0.0-20181107165924-66b7b1311ac8 // indirect
+	google.golang.org/api v0.0.0-20181108001712-cfbc873f6b93
+	google.golang.org/appengine v1.3.0 // indirect
 	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
 )
