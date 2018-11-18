@@ -1,16 +1,20 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"io"
+	"log"
 	"os"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/olekukonko/tablewriter"
 	"github.com/pkg/errors"
 	"github.com/urfave/cli"
 	"github.com/y-yagi/gtodo"
+	tasks "google.golang.org/api/tasks/v1"
 )
 
 func main() {
@@ -97,44 +101,56 @@ func appRun(c *cli.Context) error {
 		return errors.Wrap(err, "Unable to retrieve task lists")
 	}
 
+	logger := log.New(os.Stdout, "", 0)
+	var wg sync.WaitGroup
+
 	if len(tList.Items) > 0 {
-		table := tablewriter.NewWriter(os.Stdout)
-		table.SetHeader([]string{"Title", "Due", "Note"})
-		table.SetBorders(tablewriter.Border{Left: true, Top: false, Right: true, Bottom: false})
-		table.SetCenterSeparator("|")
-
 		for _, i := range tList.Items {
-			tasks, err := srv.Tasks().List(i.Id).MaxResults(50).Do()
-			if err != nil {
-				return errors.Wrap(err, "Unable to retrieve tasks")
-			}
+			wg.Add(1)
 
-			showHeader(os.Stdout, i.Title)
+			go func(item *tasks.TaskList) {
+				defer wg.Done()
 
-			for _, task := range tasks.Items {
-				var data []string
-				var due string
+				buf := &bytes.Buffer{}
+				table := tablewriter.NewWriter(buf)
+				table.SetHeader([]string{"Title", "Due", "Note"})
+				table.SetBorders(tablewriter.Border{Left: true, Top: false, Right: true, Bottom: false})
+				table.SetCenterSeparator("|")
 
-				if task.Title == "" {
-					continue
+				tasks, err := srv.Tasks().List(item.Id).MaxResults(50).Do()
+				if err != nil {
+					logger.Printf("Unable to retrieve tasks: %v\n", err)
+					return
 				}
 
-				data = append(data, task.Title)
-				if task.Due != "" {
-					time, _ := time.Parse(time.RFC3339, task.Due)
-					due = time.Format("2006-1-2")
+				showHeader(buf, item.Title)
+
+				for _, task := range tasks.Items {
+					var data []string
+					var due string
+
+					if task.Title == "" {
+						continue
+					}
+
+					data = append(data, task.Title)
+					if task.Due != "" {
+						time, _ := time.Parse(time.RFC3339, task.Due)
+						due = time.Format("2006-1-2")
+					}
+					data = append(data, due)
+					data = append(data, task.Notes)
+					table.Append(data)
 				}
-				data = append(data, due)
-				data = append(data, task.Notes)
-				table.Append(data)
-			}
-			table.Render()
-			table.ClearRows()
-			fmt.Fprintf(os.Stdout, "\n")
+
+				table.Render()
+				logger.Print(buf.String() + "\n")
+			}(i)
 		}
 	} else {
-		fmt.Print("No task lists found.")
+		logger.Print("No task lists found.")
 	}
+	wg.Wait()
 
 	return nil
 }
