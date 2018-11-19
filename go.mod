@@ -1,7 +1,7 @@
 module github.com/y-yagi/gtodo
 
 require (
-	cloud.google.com/go v0.32.0 // indirect
+	cloud.google.com/go v0.33.1 // indirect
 	github.com/chzyer/logex v1.1.10 // indirect
 	github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e // indirect
 	github.com/chzyer/test v0.0.0-20180213035817-a1ea475d72b1 // indirect
@@ -16,12 +16,12 @@ require (
 	github.com/olekukonko/tablewriter v0.0.1
 	github.com/pkg/errors v0.8.0
 	github.com/urfave/cli v1.20.0
-	github.com/y-yagi/configure v0.0.0-20181002081935-8f74636cf485
-	golang.org/x/net v0.0.0-20181108082009-03003ca0c849 // indirect
+	github.com/y-yagi/configure v0.1.0
+	golang.org/x/net v0.0.0-20181114220301-adae6a3d119a // indirect
 	golang.org/x/oauth2 v0.0.0-20181106182150-f42d05182288
 	golang.org/x/sync v0.0.0-20181108010431-42b317875d0f // indirect
-	golang.org/x/sys v0.0.0-20181107165924-66b7b1311ac8 // indirect
-	google.golang.org/api v0.0.0-20181108001712-cfbc873f6b93
+	golang.org/x/sys v0.0.0-20181119195503-ec83556a53fe // indirect
+	google.golang.org/api v0.0.0-20181114235557-83a9d304b1e6
 	google.golang.org/appengine v1.3.0 // indirect
 	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
 )
