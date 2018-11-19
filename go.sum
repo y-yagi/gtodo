@@ -44,6 +44,8 @@ github.com/y-yagi/configure v0.0.0-20180721061124-956c7b6f82b6 h1:IxYsObic8nvfnR
 github.com/y-yagi/configure v0.0.0-20180721061124-956c7b6f82b6/go.mod h1:lRuFMcOKuIn79TXSuo0dsm1OTC1hsGXxsmmyUbXe4es=
 github.com/y-yagi/configure v0.0.0-20181002081935-8f74636cf485 h1:0kA4Scq5Fv35HYMqLM4h4C6NM0juSx6ha1rr7tJLTnU=
 github.com/y-yagi/configure v0.0.0-20181002081935-8f74636cf485/go.mod h1:BztcwSytGmEB/wRUn4z6kIQhYmCZvbXUGKWkWjuJGkg=
+github.com/y-yagi/configure v0.1.0 h1:0mdRnkHw1NYST2f10OeeNsiaSLc12Za7IkMgse7zp00=
+github.com/y-yagi/configure v0.1.0/go.mod h1:BztcwSytGmEB/wRUn4z6kIQhYmCZvbXUGKWkWjuJGkg=
 golang.org/x/net v0.0.0-20180724234803-3673e40ba225/go.mod h1:mL1N/T3taQHkDXs73rZJwtUhF3w3ftmwwsq0BUmARs4=
 golang.org/x/net v0.0.0-20180921000356-2f5d2388922f h1:QM2QVxvDoW9PFSPp/zy9FgxJLfaWTZlS61KEPtBwacM=
 golang.org/x/net v0.0.0-20180921000356-2f5d2388922f/go.mod h1:mL1N/T3taQHkDXs73rZJwtUhF3w3ftmwwsq0BUmARs4=
