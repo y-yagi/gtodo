@@ -148,7 +148,7 @@ func selectTask(srv *gtodo.Service, taskListID string) (tasks.Task, error) {
 	}
 
 	if len(taskSrv.Items) == 1 {
-		task.Id = taskSrv.Items[0].Id
+		task = *taskSrv.Items[0]
 	} else {
 		var selectItems []string
 		titleListWithID := map[string]*tasks.Task{}
