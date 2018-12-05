@@ -1,8 +1,10 @@
 package main
 
 import (
+	"strings"
 	"time"
 
+	"github.com/0xAX/notificator"
 	"github.com/manifoldco/promptui"
 	"github.com/pkg/errors"
 	"github.com/urfave/cli"
@@ -240,5 +242,53 @@ func buildTask(task *tasks.Task) error {
 		return errors.Wrap(err, "Prompt failed")
 	}
 
+	return nil
+}
+
+func notifyTask(c *cli.Context) error {
+	notify := notificator.New(notificator.Options{
+		AppName: "gtodo",
+	})
+
+	srv, err := gtodo.NewService()
+	if err != nil {
+		return err
+	}
+
+	tList, err := srv.Tasklists().List().MaxResults(10).Do()
+	if err != nil {
+		return errors.Wrap(err, "Unable to retrieve task lists")
+	}
+
+	if len(tList.Items) == 0 {
+		return nil
+	}
+
+	for _, i := range tList.Items {
+		var msg string
+
+		tasks, err := srv.Tasks().List(i.Id).MaxResults(50).Do()
+		if err != nil {
+			return errors.Wrap(err, "Unable to retrieve tasks")
+		}
+
+		for _, task := range tasks.Items {
+			if task.Title == "" {
+				continue
+			}
+
+			msg += task.Title
+			if task.Due != "" {
+				time, _ := time.Parse(time.RFC3339, task.Due)
+				msg += "(" + time.Format("2006-1-2") + ")"
+			}
+			msg += "\n"
+		}
+
+		msg = strings.TrimRight(msg, "\n")
+		if len(msg) != 0 {
+			notify.Push("gtodo", msg, "dialog-information", notificator.UR_CRITICAL)
+		}
+	}
 	return nil
 }
