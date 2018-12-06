@@ -2,6 +2,7 @@ module github.com/y-yagi/gtodo
 
 require (
 	cloud.google.com/go v0.33.1 // indirect
+	github.com/0xAX/notificator v0.0.0-20181105090803-d81462e38c21 // indirect
 	github.com/alecthomas/units v0.0.0-20151022065526-2efee857e7cf // indirect
 	github.com/manifoldco/promptui v0.3.2
 	github.com/mattn/go-runewidth v0.0.3 // indirect

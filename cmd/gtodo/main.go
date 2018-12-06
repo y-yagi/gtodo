@@ -59,6 +59,11 @@ func commands() []cli.Command {
 			Action:  updateTask,
 		},
 		cli.Command{
+			Name:   "notify",
+			Usage:  "notify todos",
+			Action: notifyTask,
+		},
+		cli.Command{
 			Name:  "tasklist",
 			Usage: "action for tasklist",
 			Subcommands: []cli.Command{
