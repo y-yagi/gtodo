@@ -11,7 +11,7 @@ require (
 	github.com/nicksnyder/go-i18n v1.10.0 // indirect
 	github.com/olekukonko/tablewriter v0.0.1
 	github.com/pelletier/go-toml v1.2.0 // indirect
-	github.com/pkg/errors v0.8.0
+	github.com/pkg/errors v0.8.1
 	github.com/urfave/cli v1.20.0
 	github.com/y-yagi/configure v0.1.0
 	golang.org/x/lint v0.0.0-20181217174547-8f45f776aaf1 // indirect
