@@ -203,7 +203,7 @@ func buildTask(task *tasks.Task) error {
 	prompt.Label = "Due(yyyy-MM-dd)"
 	if len(task.Due) != 0 {
 		time, _ := time.Parse(time.RFC3339, task.Due)
-		due := time.Format("2006-1-2")
+		due := time.Format("2006-01-02")
 		prompt.Default = due
 	} else {
 		prompt.Default = ""
