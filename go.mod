@@ -1,7 +1,6 @@
 module github.com/y-yagi/gtodo
 
 require (
-	cloud.google.com/go v0.36.0 // indirect
 	github.com/0xAX/notificator v0.0.0-20181105090803-d81462e38c21
 	github.com/alecthomas/gometalinter v3.0.0+incompatible // indirect
 	github.com/alecthomas/units v0.0.0-20151022065526-2efee857e7cf // indirect
@@ -18,10 +17,9 @@ require (
 	github.com/urfave/cli v1.20.0
 	github.com/y-yagi/configure v0.1.0
 	golang.org/x/lint v0.0.0-20181217174547-8f45f776aaf1 // indirect
-	golang.org/x/net v0.0.0-20190206173232-65e2d4e15006 // indirect
-	golang.org/x/oauth2 v0.0.0-20190211184951-80673b4a4bfc
-	golang.org/x/sys v0.0.0-20190209173611-3b5209105503 // indirect
-	golang.org/x/tools v0.0.0-20190211183033-657755b003d8 // indirect
+	golang.org/x/oauth2 v0.0.0-20190212230446-3e8b2be13635
+	golang.org/x/sys v0.0.0-20190215142949-d0b11bdaac8a // indirect
+	golang.org/x/tools v0.0.0-20190214204934-8dcb7bc8c7fe // indirect
 	google.golang.org/api v0.1.0
 	gopkg.in/alecthomas/kingpin.v3-unstable v3.0.0-20180810215634-df19058c872c // indirect
 	gopkg.in/yaml.v2 v2.2.2 // indirect
