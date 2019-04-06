@@ -118,6 +118,7 @@ func appRun(c *cli.Context) error {
 
 				buf := &bytes.Buffer{}
 				table := tablewriter.NewWriter(buf)
+				table.SetAutoWrapText(false)
 				table.SetHeader([]string{"Title", "Due", "Note"})
 				table.SetBorders(tablewriter.Border{Left: true, Top: false, Right: true, Bottom: false})
 				table.SetCenterSeparator("|")
