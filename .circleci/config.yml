@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/golang:1.11
+      - image: circleci/golang:1.12
         environment:
           GO111MODULE: "on"
     working_directory: /go/src/github.com/y-yagi/gtodo
@@ -12,7 +12,7 @@ jobs:
       - run:
           name: Run lint
           command: |
-            GO111MODULE=off go get -u github.com/golang/lint/golint
+            GO111MODULE=off go get -u golang.org/x/lint/golint
             golint -set_exit_status ./...
       - Run:
           name: Run go mod
@@ -28,7 +28,7 @@ jobs:
 
   modules-update:
     docker:
-      - image: circleci/golang:1.11
+      - image: circleci/golang:1.12
         environment:
           GO111MODULE: "on"
     working_directory: /go/src/github.com/y-yagi/gtodo
