@@ -12,7 +12,7 @@ jobs:
       - run:
           name: Run lint
           command: |
-            GO111MODULE=off go get -u github.com/golang/lint/golint
+            GO111MODULE=off go get -u golang.org/x/lint/golint
             golint -set_exit_status ./...
       - Run:
           name: Run go mod
