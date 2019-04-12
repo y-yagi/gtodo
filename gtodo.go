@@ -13,6 +13,7 @@ import (
 	"github.com/y-yagi/configure"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
+	"google.golang.org/api/option"
 	tasks "google.golang.org/api/tasks/v1"
 )
 
@@ -48,7 +49,8 @@ func (srv *Service) buildTaskService() error {
 		return errors.Wrap(err, "Unable to get Client")
 	}
 
-	srv.taskService, err = tasks.New(client)
+	ctx := context.Background()
+	srv.taskService, err = tasks.NewService(ctx, option.WithHTTPClient(client))
 	if err != nil {
 		return errors.Wrap(err, "Unable to retrieve tasks Client")
 	}
