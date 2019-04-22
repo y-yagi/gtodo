@@ -2,7 +2,7 @@ module github.com/y-yagi/gtodo
 
 require (
 	github.com/0xAX/notificator v0.0.0-20181105090803-d81462e38c21
-	github.com/manifoldco/promptui v0.3.2
+	github.com/manifoldco/promptui v0.3.3-0.20190411181407-35bab80e16a4
 	github.com/mattn/go-runewidth v0.0.4 // indirect
 	github.com/nicksnyder/go-i18n v1.10.0 // indirect
 	github.com/olekukonko/tablewriter v0.0.1
