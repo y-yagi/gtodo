@@ -9,7 +9,7 @@ require (
 	github.com/pelletier/go-toml v1.2.0 // indirect
 	github.com/pkg/errors v0.8.1
 	github.com/urfave/cli v1.20.0
-	github.com/y-yagi/configure v0.1.0
+	github.com/y-yagi/configure v0.2.0
 	golang.org/x/oauth2 v0.0.0-20190226205417-e64efc72b421
 	google.golang.org/api v0.3.2
 	gopkg.in/alecthomas/kingpin.v3-unstable v3.0.0-20180810215634-df19058c872c // indirect
