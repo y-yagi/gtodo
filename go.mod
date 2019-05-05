@@ -15,6 +15,7 @@ require (
 	github.com/olekukonko/tablewriter v0.0.1
 	github.com/pelletier/go-toml v1.3.0 // indirect
 	github.com/pkg/errors v0.8.1
+	github.com/stretchr/objx v0.1.1 // indirect
 	github.com/stretchr/testify v1.3.0 // indirect
 	github.com/urfave/cli v1.20.0
 	github.com/y-yagi/configure v0.2.0
