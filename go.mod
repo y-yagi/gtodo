@@ -1,10 +1,9 @@
 module github.com/y-yagi/gtodo
 
 require (
-	cloud.google.com/go v0.38.0 // indirect
+	cloud.google.com/go v0.39.0 // indirect
 	github.com/0xAX/notificator v0.0.0-20181105090803-d81462e38c21
 	github.com/alecthomas/units v0.0.0-20151022065526-2efee857e7cf // indirect
-	github.com/golang/protobuf v1.3.1 // indirect
 	github.com/google/go-cmp v0.3.0 // indirect
 	github.com/hashicorp/golang-lru v0.5.1 // indirect
 	github.com/lunixbochs/vtclean v1.0.0 // indirect
@@ -20,14 +19,14 @@ require (
 	github.com/urfave/cli v1.20.0
 	github.com/y-yagi/configure v0.2.0
 	golang.org/x/lint v0.0.0-20190409202823-959b441ac422 // indirect
-	golang.org/x/net v0.0.0-20190503192946-f4e77d36d62c // indirect
+	golang.org/x/net v0.0.0-20190509222800-a4d6f7feada5 // indirect
 	golang.org/x/oauth2 v0.0.0-20190402181905-9f3314589c9a
-	golang.org/x/sys v0.0.0-20190506115046-ca7f33d4116e // indirect
+	golang.org/x/sys v0.0.0-20190509141414-a5b02f93d862 // indirect
 	golang.org/x/text v0.3.2 // indirect
-	golang.org/x/tools v0.0.0-20190506145303-2d16b83fe98c // indirect
+	golang.org/x/tools v0.0.0-20190513214131-2a413a02cc73 // indirect
 	google.golang.org/api v0.5.0
 	google.golang.org/appengine v1.5.0 // indirect
-	google.golang.org/genproto v0.0.0-20190502173448-54afdca5d873 // indirect
+	google.golang.org/genproto v0.0.0-20190513181449-d00d292a067c // indirect
 	google.golang.org/grpc v1.20.1 // indirect
 	gopkg.in/alecthomas/kingpin.v3-unstable v3.0.0-20180810215634-df19058c872c // indirect
 )
