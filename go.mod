@@ -19,14 +19,14 @@ require (
 	github.com/urfave/cli v1.20.0
 	github.com/y-yagi/configure v0.2.0
 	golang.org/x/lint v0.0.0-20190409202823-959b441ac422 // indirect
-	golang.org/x/net v0.0.0-20190509222800-a4d6f7feada5 // indirect
-	golang.org/x/oauth2 v0.0.0-20190402181905-9f3314589c9a
-	golang.org/x/sys v0.0.0-20190509141414-a5b02f93d862 // indirect
+	golang.org/x/net v0.0.0-20190520210107-018c4d40a106 // indirect
+	golang.org/x/oauth2 v0.0.0-20190517181255-950ef44c6e07
+	golang.org/x/sys v0.0.0-20190520201301-c432e742b0af // indirect
 	golang.org/x/text v0.3.2 // indirect
-	golang.org/x/tools v0.0.0-20190513214131-2a413a02cc73 // indirect
+	golang.org/x/tools v0.0.0-20190520215315-eda2c2f1ae14 // indirect
 	google.golang.org/api v0.5.0
-	google.golang.org/appengine v1.5.0 // indirect
-	google.golang.org/genproto v0.0.0-20190513181449-d00d292a067c // indirect
+	google.golang.org/appengine v1.6.0 // indirect
+	google.golang.org/genproto v0.0.0-20190516172635-bb713bdc0e52 // indirect
 	google.golang.org/grpc v1.20.1 // indirect
 	gopkg.in/alecthomas/kingpin.v3-unstable v3.0.0-20180810215634-df19058c872c // indirect
 )
