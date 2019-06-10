@@ -12,6 +12,6 @@ require (
 	github.com/urfave/cli v1.20.0
 	github.com/y-yagi/configure v0.2.0
 	golang.org/x/oauth2 v0.0.0-20190523182746-aaccbc9213b0
-	google.golang.org/api v0.5.0
+	google.golang.org/api v0.6.0
 	gopkg.in/alecthomas/kingpin.v3-unstable v3.0.0-20180810215634-df19058c872c // indirect
 )
