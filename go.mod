@@ -9,7 +9,7 @@ require (
 	github.com/olekukonko/tablewriter v0.0.1
 	github.com/pelletier/go-toml v1.4.0 // indirect
 	github.com/pkg/errors v0.8.1
-	github.com/urfave/cli v1.20.0
+	github.com/urfave/cli v1.21.0
 	github.com/y-yagi/configure v0.2.0
 	golang.org/x/oauth2 v0.0.0-20190523182746-aaccbc9213b0
 	google.golang.org/api v0.8.0
