@@ -1,21 +1,19 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
-	"io"
 	"log"
 	"os"
-	"strings"
 	"sync"
-	"time"
 
-	"github.com/olekukonko/tablewriter"
 	"github.com/pkg/errors"
 	"github.com/urfave/cli"
+	"github.com/y-yagi/gocui"
 	"github.com/y-yagi/gtodo"
 	tasks "google.golang.org/api/tasks/v1"
 )
+
+var tasksPerList = map[string][]*tasks.Task{}
 
 func main() {
 	os.Exit(run(os.Args))
@@ -110,59 +108,41 @@ func appRun(c *cli.Context) error {
 	var wg sync.WaitGroup
 
 	if len(tList.Items) > 0 {
-		for _, i := range tList.Items {
+		for _, item := range tList.Items {
 			wg.Add(1)
 
 			go func(item *tasks.TaskList) {
 				defer wg.Done()
-
-				buf := &bytes.Buffer{}
-				table := tablewriter.NewWriter(buf)
-				table.SetAutoWrapText(false)
-				table.SetHeader([]string{"Title", "Due", "Note"})
-				table.SetBorders(tablewriter.Border{Left: true, Top: false, Right: true, Bottom: false})
-				table.SetCenterSeparator("|")
-
 				tasks, err := srv.Tasks().List(item.Id).MaxResults(50).Do()
+
 				if err != nil {
 					logger.Printf("Unable to retrieve tasks: %v\n", err)
-					return
 				}
 
-				showHeader(buf, item.Title)
-
-				for _, task := range tasks.Items {
-					var data []string
-					var due string
-
-					if task.Title == "" {
-						continue
-					}
-
-					data = append(data, task.Title)
-					if task.Due != "" {
-						time, _ := time.Parse(time.RFC3339, task.Due)
-						due = time.Format("2006-1-2")
-					}
-					data = append(data, due)
-					data = append(data, task.Notes)
-					table.Append(data)
-				}
-
-				table.Render()
-				logger.Print(buf.String() + "\n")
-			}(i)
+				tasksPerList[item.Title] = tasks.Items
+			}(item)
 		}
 	} else {
-		logger.Print("No task lists found.")
+		return errors.Wrap(err, "No task lists found")
 	}
 	wg.Wait()
 
-	return nil
-}
+	g, err := gocui.NewGui(gocui.OutputNormal)
+	if err != nil {
+		return errors.Wrap(err, "gui create error")
+	}
+	defer g.Close()
 
-func showHeader(w io.Writer, header string) {
-	fmt.Fprintf(w, "─────────────────────────────────────\n")
-	fmt.Fprintf(w, "  %s\n", strings.TrimSpace(header))
-	fmt.Fprintf(w, "─────────────────────────────────────\n")
+	g.Cursor = true
+	g.SetManagerFunc(layout)
+
+	if err := keybindings(g); err != nil {
+		return errors.Wrap(err, "Key bindings error")
+	}
+
+	if err := g.MainLoop(); err != nil && err != gocui.ErrQuit {
+		return errors.Wrap(err, "Unexpected error")
+	}
+
+	return nil
 }
