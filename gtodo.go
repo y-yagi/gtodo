@@ -20,11 +20,14 @@ import (
 // Service is a todo module.
 type Service struct {
 	taskService *tasks.Service
+	cache       *Cache
 }
 
 // NewService create a new service.
 func NewService() (*Service, error) {
-	srv := &Service{}
+	// TODO(y-yagi) Consider cache path
+	cache := &Cache{"/tmp/"}
+	srv := &Service{cache: cache}
 
 	if err := srv.buildTaskService(); err != nil {
 		return nil, err
@@ -65,7 +68,25 @@ func (srv *Service) TasklistsService() *tasks.TasklistsService {
 
 // TaskLists return TaskLists.
 func (srv *Service) TaskLists() (*tasks.TaskLists, error) {
-	return srv.TasklistsService().List().MaxResults(20).Do()
+	data, err := srv.cache.Read("tasklists")
+	if data != nil && err == nil {
+		var tList tasks.TaskLists
+		err = json.Unmarshal(data, &tList)
+		return &tList, err
+	}
+
+	tList, err := srv.taskService.Tasklists.List().MaxResults(20).Do()
+	if err != nil {
+		return nil, err
+	}
+
+	json, err := tList.MarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	srv.cache.Write("tasklists", json)
+
+	return tList, nil
 }
 
 // TasksService return TasksService.
