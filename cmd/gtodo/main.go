@@ -101,7 +101,7 @@ func appRun(c *cli.Context) error {
 		return err
 	}
 
-	tList, err := srv.Tasklists().List().MaxResults(10).Do()
+	tList, err := srv.TaskLists()
 	if err != nil {
 		return errors.Wrap(err, "Unable to retrieve task lists")
 	}
@@ -123,7 +123,7 @@ func appRun(c *cli.Context) error {
 				table.SetBorders(tablewriter.Border{Left: true, Top: false, Right: true, Bottom: false})
 				table.SetCenterSeparator("|")
 
-				tasks, err := srv.Tasks().List(item.Id).MaxResults(50).Do()
+				tasks, err := srv.TasksService().List(item.Id).MaxResults(50).Do()
 				if err != nil {
 					logger.Printf("Unable to retrieve tasks: %v\n", err)
 					return

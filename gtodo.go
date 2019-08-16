@@ -58,13 +58,18 @@ func (srv *Service) buildTaskService() error {
 	return nil
 }
 
-// Tasklists return TasklistsService.
-func (srv *Service) Tasklists() *tasks.TasklistsService {
+// TasklistsService return TasklistsService.
+func (srv *Service) TasklistsService() *tasks.TasklistsService {
 	return srv.taskService.Tasklists
 }
 
-// Tasks return TasksService.
-func (srv *Service) Tasks() *tasks.TasksService {
+// TaskLists return TaskLists.
+func (srv *Service) TaskLists() (*tasks.TaskLists, error) {
+	return srv.TasklistsService().List().MaxResults(20).Do()
+}
+
+// TasksService return TasksService.
+func (srv *Service) TasksService() *tasks.TasksService {
 	return srv.taskService.Tasks
 }
 

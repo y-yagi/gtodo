@@ -19,7 +19,7 @@ func addTasklist(c *cli.Context) error {
 		return err
 	}
 
-	_, err = srv.Tasklists().Insert(&tasklist).Do()
+	_, err = srv.TasklistsService().Insert(&tasklist).Do()
 	if err != nil {
 		return errors.Wrap(err, "Tasklist insert failed")
 	}
@@ -48,7 +48,7 @@ func deleteTasklist(c *cli.Context) error {
 		return nil
 	}
 
-	if err = srv.Tasklists().Delete(tasklist.Id).Do(); err != nil {
+	if err = srv.TasklistsService().Delete(tasklist.Id).Do(); err != nil {
 		return errors.Wrap(err, "Tasklist delete failed")
 	}
 
@@ -82,7 +82,7 @@ func buildTasklist(tasklist *tasks.TaskList) error {
 func selectTasklist(srv *gtodo.Service) (tasks.TaskList, error) {
 	var tasklist tasks.TaskList
 
-	tList, err := srv.Tasklists().List().MaxResults(10).Do()
+	tList, err := srv.TaskLists()
 	if err != nil {
 		return tasklist, errors.Wrap(err, "Unable to retrieve task lists")
 	}
