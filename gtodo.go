@@ -89,6 +89,13 @@ func (srv *Service) TaskLists() (*tasks.TaskLists, error) {
 	return tList, nil
 }
 
+// TaskLists return TaskLists.
+func (srv *Service) InsertTaskList(taskList *tasks.TaskList) error {
+	_, err := srv.TasklistsService().Insert(taskList).Do()
+	srv.cache.Delete("tasklists")
+	return err
+}
+
 // TasksService return TasksService.
 func (srv *Service) TasksService() *tasks.TasksService {
 	return srv.taskService.Tasks
