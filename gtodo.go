@@ -59,12 +59,12 @@ func (srv *Service) buildTaskService() error {
 }
 
 // Tasklists return TasklistsService.
-func (srv *Service) Tasklists() *tasks.TasklistsService {
+func (srv *Service) TasklistsService() *tasks.TasklistsService {
 	return srv.taskService.Tasklists
 }
 
 // Tasks return TasksService.
-func (srv *Service) Tasks() *tasks.TasksService {
+func (srv *Service) TasksService() *tasks.TasksService {
 	return srv.taskService.Tasks
 }
 

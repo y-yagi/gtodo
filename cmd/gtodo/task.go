@@ -28,7 +28,7 @@ func addTask(c *cli.Context) error {
 		return err
 	}
 
-	_, err = srv.Tasks().Insert(tasklist.Id, &task).Do()
+	_, err = srv.TasksService().Insert(tasklist.Id, &task).Do()
 	if err != nil {
 		return errors.Wrap(err, "Task insert failed")
 	}
@@ -63,7 +63,7 @@ func deleteTask(c *cli.Context) error {
 		return nil
 	}
 
-	if err = srv.Tasks().Delete(tasklist.Id, task.Id).Do(); err != nil {
+	if err = srv.TasksService().Delete(tasklist.Id, task.Id).Do(); err != nil {
 		return errors.Wrap(err, "Task delete failed")
 	}
 
@@ -90,7 +90,7 @@ func updateTask(c *cli.Context) error {
 		return err
 	}
 
-	_, err = srv.Tasks().Update(tasklist.Id, task.Id, &task).Do()
+	_, err = srv.TasksService().Update(tasklist.Id, task.Id, &task).Do()
 	if err != nil {
 		return errors.Wrap(err, "Task update failed")
 	}
@@ -126,12 +126,12 @@ func completeTask(c *cli.Context) error {
 	}
 
 	task.Status = "completed"
-	if _, err = srv.Tasks().Update(tasklist.Id, task.Id, &task).Do(); err != nil {
+	if _, err = srv.TasksService().Update(tasklist.Id, task.Id, &task).Do(); err != nil {
 		return errors.Wrap(err, "Task complete failed")
 	}
 
 	// NOTE: Clears all completed tasks
-	if err = srv.Tasks().Clear(tasklist.Id).Do(); err != nil {
+	if err = srv.TasksService().Clear(tasklist.Id).Do(); err != nil {
 		return errors.Wrap(err, "Task clear failed")
 	}
 	return nil
@@ -140,7 +140,7 @@ func completeTask(c *cli.Context) error {
 func selectTask(srv *gtodo.Service, taskListID string) (tasks.Task, error) {
 	var task tasks.Task
 
-	taskSrv, err := srv.Tasks().List(taskListID).MaxResults(50).Do()
+	taskSrv, err := srv.TasksService().List(taskListID).MaxResults(50).Do()
 	if err != nil {
 		return task, errors.Wrap(err, "Unable to retrieve tasks")
 	}
@@ -255,7 +255,7 @@ func notifyTask(c *cli.Context) error {
 		return err
 	}
 
-	tList, err := srv.Tasklists().List().MaxResults(10).Do()
+	tList, err := srv.TasklistsService().List().MaxResults(10).Do()
 	if err != nil {
 		return errors.Wrap(err, "Unable to retrieve task lists")
 	}
@@ -267,7 +267,7 @@ func notifyTask(c *cli.Context) error {
 	for _, i := range tList.Items {
 		var msg string
 
-		tasks, err := srv.Tasks().List(i.Id).MaxResults(50).Do()
+		tasks, err := srv.TasksService().List(i.Id).MaxResults(50).Do()
 		if err != nil {
 			return errors.Wrap(err, "Unable to retrieve tasks")
 		}
