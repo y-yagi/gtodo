@@ -101,7 +101,7 @@ func appRun(c *cli.Context) error {
 		return err
 	}
 
-	tList, err := srv.TasklistsService().List().MaxResults(10).Do()
+	tList, err := srv.TaskLists()
 	if err != nil {
 		return errors.Wrap(err, "Unable to retrieve task lists")
 	}

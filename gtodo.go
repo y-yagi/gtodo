@@ -63,6 +63,11 @@ func (srv *Service) TasklistsService() *tasks.TasklistsService {
 	return srv.taskService.Tasklists
 }
 
+// Tasklists return TaskLists.
+func (srv *Service) TaskLists() (*tasks.TaskLists, error) {
+	return srv.TasklistsService().List().MaxResults(20).Do()
+}
+
 // Tasks return TasksService.
 func (srv *Service) TasksService() *tasks.TasksService {
 	return srv.taskService.Tasks

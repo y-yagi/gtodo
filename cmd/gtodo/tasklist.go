@@ -82,7 +82,7 @@ func buildTasklist(tasklist *tasks.TaskList) error {
 func selectTasklist(srv *gtodo.Service) (tasks.TaskList, error) {
 	var tasklist tasks.TaskList
 
-	tList, err := srv.TasklistsService().List().MaxResults(10).Do()
+	tList, err := srv.TaskLists()
 	if err != nil {
 		return tasklist, errors.Wrap(err, "Unable to retrieve task lists")
 	}
