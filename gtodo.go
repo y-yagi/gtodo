@@ -23,6 +23,8 @@ type Service struct {
 	cache       *Cache
 }
 
+const taskListsCacheKey = "tasklists"
+
 // NewService create a new service.
 func NewService() (*Service, error) {
 	// TODO(y-yagi) Consider cache path
@@ -68,7 +70,7 @@ func (srv *Service) TasklistsService() *tasks.TasklistsService {
 
 // TaskLists return TaskLists.
 func (srv *Service) TaskLists() (*tasks.TaskLists, error) {
-	data, err := srv.cache.Read("tasklists")
+	data, err := srv.cache.Read(taskListsCacheKey)
 	if data != nil && err == nil {
 		var tList tasks.TaskLists
 		err = json.Unmarshal(data, &tList)
@@ -84,7 +86,7 @@ func (srv *Service) TaskLists() (*tasks.TaskLists, error) {
 	if err != nil {
 		return nil, err
 	}
-	srv.cache.Write("tasklists", json)
+	srv.cache.Write(taskListsCacheKey, json)
 
 	return tList, nil
 }
@@ -92,14 +94,14 @@ func (srv *Service) TaskLists() (*tasks.TaskLists, error) {
 // InsertTaskList insert new TaskList.
 func (srv *Service) InsertTaskList(taskList *tasks.TaskList) error {
 	_, err := srv.TasklistsService().Insert(taskList).Do()
-	srv.cache.Delete("tasklists")
+	srv.cache.Delete(taskListsCacheKey)
 	return err
 }
 
 // DeleteTaskList delete TaskList.
 func (srv *Service) DeleteTaskList(id string) error {
 	err := srv.TasklistsService().Delete(id).Do()
-	srv.cache.Delete("tasklists")
+	srv.cache.Delete(taskListsCacheKey)
 	return err
 }
 
