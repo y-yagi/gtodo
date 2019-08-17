@@ -47,7 +47,7 @@ func deleteTasklist(c *cli.Context) error {
 		return nil
 	}
 
-	if err = srv.TasklistsService().Delete(tasklist.Id).Do(); err != nil {
+	if err = srv.DeleteTaskList(tasklist.Id); err != nil {
 		return errors.Wrap(err, "Tasklist delete failed")
 	}
 
