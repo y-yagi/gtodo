@@ -89,14 +89,14 @@ func (srv *Service) TaskLists() (*tasks.TaskLists, error) {
 	return tList, nil
 }
 
-// TaskLists return TaskLists.
+// InsertTaskList insert new TaskList.
 func (srv *Service) InsertTaskList(taskList *tasks.TaskList) error {
 	_, err := srv.TasklistsService().Insert(taskList).Do()
 	srv.cache.Delete("tasklists")
 	return err
 }
 
-// TaskLists return TaskLists.
+// DeleteTaskList delete TaskList.
 func (srv *Service) DeleteTaskList(id string) error {
 	err := srv.TasklistsService().Delete(id).Do()
 	srv.cache.Delete("tasklists")
