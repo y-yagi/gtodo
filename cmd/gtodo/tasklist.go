@@ -14,13 +14,12 @@ func addTasklist(c *cli.Context) error {
 		return err
 	}
 
-	var tasklist tasks.TaskList
-	if err := buildTasklist(&tasklist); err != nil {
+	var taskList tasks.TaskList
+	if err := buildTasklist(&taskList); err != nil {
 		return err
 	}
 
-	_, err = srv.TasklistsService().Insert(&tasklist).Do()
-	if err != nil {
+	if err = srv.InsertTaskList(&taskList); err != nil {
 		return errors.Wrap(err, "Tasklist insert failed")
 	}
 	return nil
@@ -48,7 +47,7 @@ func deleteTasklist(c *cli.Context) error {
 		return nil
 	}
 
-	if err = srv.TasklistsService().Delete(tasklist.Id).Do(); err != nil {
+	if err = srv.DeleteTaskList(tasklist.Id); err != nil {
 		return errors.Wrap(err, "Tasklist delete failed")
 	}
 
