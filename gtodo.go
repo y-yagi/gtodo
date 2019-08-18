@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 
 	"github.com/pkg/errors"
+	"github.com/y-yagi/cacher"
 	"github.com/y-yagi/configure"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
@@ -20,7 +21,7 @@ import (
 // Service is a todo module.
 type Service struct {
 	taskService *tasks.Service
-	cache       *Cache
+	cacher      *cacher.Cacher
 }
 
 const taskListsCacheKey = "tasklists"
@@ -28,8 +29,8 @@ const taskListsCacheKey = "tasklists"
 // NewService create a new service.
 func NewService() (*Service, error) {
 	// TODO(y-yagi) Consider cache path
-	cache := &Cache{"/tmp/"}
-	srv := &Service{cache: cache}
+	cacher := cacher.WithFileStore("/tmp/")
+	srv := &Service{cacher: cacher}
 
 	if err := srv.buildTaskService(); err != nil {
 		return nil, err
@@ -70,7 +71,7 @@ func (srv *Service) TasklistsService() *tasks.TasklistsService {
 
 // TaskLists return TaskLists.
 func (srv *Service) TaskLists() (*tasks.TaskLists, error) {
-	data, err := srv.cache.Read(taskListsCacheKey)
+	data, err := srv.cacher.Read(taskListsCacheKey)
 	if data != nil && err == nil {
 		var tList tasks.TaskLists
 		err = json.Unmarshal(data, &tList)
@@ -86,7 +87,7 @@ func (srv *Service) TaskLists() (*tasks.TaskLists, error) {
 	if err != nil {
 		return nil, err
 	}
-	srv.cache.Write(taskListsCacheKey, json)
+	srv.cacher.Write(taskListsCacheKey, json)
 
 	return tList, nil
 }
@@ -94,14 +95,14 @@ func (srv *Service) TaskLists() (*tasks.TaskLists, error) {
 // InsertTaskList insert new TaskList.
 func (srv *Service) InsertTaskList(taskList *tasks.TaskList) error {
 	_, err := srv.TasklistsService().Insert(taskList).Do()
-	srv.cache.Delete(taskListsCacheKey)
+	srv.cacher.Delete(taskListsCacheKey)
 	return err
 }
 
 // DeleteTaskList delete TaskList.
 func (srv *Service) DeleteTaskList(id string) error {
 	err := srv.TasklistsService().Delete(id).Do()
-	srv.cache.Delete(taskListsCacheKey)
+	srv.cacher.Delete(taskListsCacheKey)
 	return err
 }
 
