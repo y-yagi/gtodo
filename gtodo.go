@@ -87,7 +87,7 @@ func (srv *Service) TaskLists() (*tasks.TaskLists, error) {
 	if err != nil {
 		return nil, err
 	}
-	srv.cacher.Write(taskListsCacheKey, json)
+	srv.cacher.Write(taskListsCacheKey, json, cacher.Forever)
 
 	return tList, nil
 }
