@@ -28,7 +28,7 @@ func addTask(c *cli.Context) error {
 		return err
 	}
 
-	_, err = srv.TasksService().Insert(tasklist.Id, &task).Do()
+	_, err = srv.InsertTask(tasklist.Id, &task)
 	if err != nil {
 		return errors.Wrap(err, "Task insert failed")
 	}
@@ -63,7 +63,7 @@ func deleteTask(c *cli.Context) error {
 		return nil
 	}
 
-	if err = srv.TasksService().Delete(tasklist.Id, task.Id).Do(); err != nil {
+	if err = srv.DeleteTask(tasklist.Id, task.Id); err != nil {
 		return errors.Wrap(err, "Task delete failed")
 	}
 
@@ -90,7 +90,7 @@ func updateTask(c *cli.Context) error {
 		return err
 	}
 
-	_, err = srv.TasksService().Update(tasklist.Id, task.Id, &task).Do()
+	_, err = srv.UpdateTask(tasklist.Id, &task)
 	if err != nil {
 		return errors.Wrap(err, "Task update failed")
 	}
@@ -126,12 +126,12 @@ func completeTask(c *cli.Context) error {
 	}
 
 	task.Status = "completed"
-	if _, err = srv.TasksService().Update(tasklist.Id, task.Id, &task).Do(); err != nil {
+	if _, err = srv.UpdateTask(tasklist.Id, &task); err != nil {
 		return errors.Wrap(err, "Task complete failed")
 	}
 
 	// NOTE: Clears all completed tasks
-	if err = srv.TasksService().Clear(tasklist.Id).Do(); err != nil {
+	if err = srv.ClearTask(tasklist.Id); err != nil {
 		return errors.Wrap(err, "Task clear failed")
 	}
 	return nil
