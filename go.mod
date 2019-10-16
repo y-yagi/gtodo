@@ -1,7 +1,7 @@
 module github.com/y-yagi/gtodo
 
 require (
-	cloud.google.com/go v0.46.3 // indirect
+	cloud.google.com/go v0.47.0 // indirect
 	github.com/0xAX/notificator v0.0.0-20181105090803-d81462e38c21
 	github.com/alecthomas/units v0.0.0-20151022065526-2efee857e7cf // indirect
 	github.com/golang/groupcache v0.0.0-20191002201903-404acd9df4cc // indirect
@@ -14,13 +14,13 @@ require (
 	github.com/urfave/cli v1.22.1
 	github.com/y-yagi/cacher v0.2.0
 	github.com/y-yagi/configure v0.2.0
+	github.com/y-yagi/goext v0.3.0 // indirect
 	go.opencensus.io v0.22.1 // indirect
-	golang.org/x/net v0.0.0-20191007182048-72f939374954 // indirect
+	golang.org/x/net v0.0.0-20191014203426-2ba7206551d1 // indirect
 	golang.org/x/oauth2 v0.0.0-20190604053449-0f29369cfe45
-	golang.org/x/sys v0.0.0-20191007154456-ef33b2fb2c41 // indirect
-	google.golang.org/api v0.10.0
-	google.golang.org/appengine v1.6.4 // indirect
-	google.golang.org/genproto v0.0.0-20191007204434-a023cd5227bd // indirect
+	golang.org/x/sys v0.0.0-20191010194322-b09406accb47 // indirect
+	google.golang.org/api v0.11.0
+	google.golang.org/appengine v1.6.5 // indirect
 	google.golang.org/grpc v1.24.0 // indirect
 	gopkg.in/alecthomas/kingpin.v3-unstable v3.0.0-20180810215634-df19058c872c // indirect
 )
