@@ -24,7 +24,10 @@ type Service struct {
 	cacher      *cacher.Cacher
 }
 
-const taskListsCacheKey = "tasklists"
+const (
+	taskListsCacheKey = "tasklists"
+	tasksCacheKey     = "tasks"
+)
 
 // NewService create a new service.
 func NewService() (*Service, error) {
@@ -109,6 +112,59 @@ func (srv *Service) DeleteTaskList(id string) error {
 // TasksService return TasksService.
 func (srv *Service) TasksService() *tasks.TasksService {
 	return srv.taskService.Tasks
+}
+
+// Tasks return Tasks.
+func (srv *Service) Tasks(taskListID string) (*tasks.Tasks, error) {
+	cacheKey := tasksCacheKey + "-" + taskListID
+
+	data, err := srv.cacher.Read(cacheKey)
+	if data != nil && err == nil {
+		var tasks tasks.Tasks
+		err = json.Unmarshal(data, &tasks)
+		return &tasks, err
+	}
+
+	tasks, err := srv.TasksService().List(taskListID).MaxResults(50).Do()
+	if err != nil {
+		return nil, err
+	}
+
+	json, err := tasks.MarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	srv.cacher.Write(cacheKey, json, cacher.Forever)
+
+	return tasks, nil
+}
+
+// InsertTask insert new Task.
+func (srv *Service) InsertTask(taskListID string, task *tasks.Task) (*tasks.Task, error) {
+	task, err := srv.TasksService().Insert(taskListID, task).Do()
+	srv.cacher.Delete(tasksCacheKey + "-" + taskListID)
+	return task, err
+}
+
+// DeleteTask delete Task.
+func (srv *Service) DeleteTask(taskListID string, taskID string) error {
+	err := srv.TasksService().Delete(taskListID, taskID).Do()
+	srv.cacher.Delete(tasksCacheKey + "-" + taskListID)
+	return err
+}
+
+// UpdateTask insert new Task.
+func (srv *Service) UpdateTask(taskListID string, task *tasks.Task) (*tasks.Task, error) {
+	task, err := srv.TasksService().Update(taskListID, task.Id, task).Do()
+	srv.cacher.Delete(tasksCacheKey + "-" + taskListID)
+	return task, err
+}
+
+// ClearTask clear Tasks.
+func (srv *Service) ClearTask(taskListID string) error {
+	err := srv.TasksService().Clear(taskListID).Do()
+	srv.cacher.Delete(tasksCacheKey + "-" + taskListID)
+	return err
 }
 
 func (srv *Service) getClient(config *oauth2.Config) (*http.Client, error) {
