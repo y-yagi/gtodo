@@ -16,9 +16,9 @@ require (
 	github.com/y-yagi/configure v0.2.0
 	github.com/y-yagi/goext v0.3.0 // indirect
 	go.opencensus.io v0.22.1 // indirect
-	golang.org/x/net v0.0.0-20191014203426-2ba7206551d1 // indirect
+	golang.org/x/net v0.0.0-20191021144547-ec77196f6094 // indirect
 	golang.org/x/oauth2 v0.0.0-20190604053449-0f29369cfe45
-	golang.org/x/sys v0.0.0-20191010194322-b09406accb47 // indirect
+	golang.org/x/sys v0.0.0-20191020212454-3e7259c5e7c2 // indirect
 	google.golang.org/api v0.11.0
 	google.golang.org/appengine v1.6.5 // indirect
 	google.golang.org/grpc v1.24.0 // indirect
