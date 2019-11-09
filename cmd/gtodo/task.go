@@ -287,7 +287,7 @@ func notifyTask(c *cli.Context) error {
 
 		msg = strings.TrimRight(msg, "\n")
 		if len(msg) != 0 {
-			notify.Push("gtodo", msg, "dialog-information", notificator.UR_CRITICAL)
+			notify.Push("gtodo", msg, "dialog-information", notificator.UR_NORMAL)
 		}
 	}
 	return nil
