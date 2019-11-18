@@ -26,32 +26,8 @@ jobs:
             GO111MODULE=off go get -u honnef.co/go/tools/cmd/staticcheck
             GO111MODULE=off staticcheck ./...
 
-  modules-update:
-    docker:
-      - image: circleci/golang:1.13
-        environment:
-          GO111MODULE: "on"
-    working_directory: /go/src/github.com/y-yagi/gtodo
-
-    steps:
-      - checkout
-      - run:
-          name: Run ci-modules-update
-          command: |
-            GO111MODULE=off go get -u github.com/y-yagi/ci-modules-update
-            ci-modules-update -u y-yagi -r y-yagi/gtodo
-
 workflows:
   version: 2
   build:
     jobs:
       - build
-  scheduled-workflow:
-    triggers:
-      - schedule:
-          cron: "0 22 * * 1"
-          filters:
-            branches:
-              only: master
-    jobs:
-      - modules-update
