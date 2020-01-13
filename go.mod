@@ -5,7 +5,7 @@ require (
 	github.com/0xAX/notificator v0.0.0-20181105090803-d81462e38c21
 	github.com/alecthomas/units v0.0.0-20151022065526-2efee857e7cf // indirect
 	github.com/golang/groupcache v0.0.0-20191027212112-611e8accdfc9 // indirect
-	github.com/manifoldco/promptui v0.3.2
+	github.com/manifoldco/promptui v0.7.0
 	github.com/mattn/go-runewidth v0.0.4 // indirect
 	github.com/nicksnyder/go-i18n v1.10.0 // indirect
 	github.com/olekukonko/tablewriter v0.0.4
