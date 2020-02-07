@@ -125,7 +125,7 @@ func (srv *Service) Tasks(taskListID string) (*tasks.Tasks, error) {
 		return &tasks, err
 	}
 
-	tasks, err := srv.TasksService().List(taskListID).MaxResults(50).Do()
+	tasks, err := srv.TasksService().List(taskListID).ShowCompleted(false).MaxResults(50).Do()
 	if err != nil {
 		return nil, err
 	}
