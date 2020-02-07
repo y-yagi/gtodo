@@ -140,7 +140,7 @@ func completeTask(c *cli.Context) error {
 func selectTask(srv *gtodo.Service, taskListID string) (tasks.Task, error) {
 	var task tasks.Task
 
-	taskSrv, err := srv.TasksService().List(taskListID).MaxResults(50).Do()
+	taskSrv, err := srv.TasksService().List(taskListID).ShowCompleted(false).MaxResults(50).Do()
 	if err != nil {
 		return task, errors.Wrap(err, "Unable to retrieve tasks")
 	}
@@ -267,7 +267,7 @@ func notifyTask(c *cli.Context) error {
 	for _, i := range tList.Items {
 		var msg string
 
-		tasks, err := srv.TasksService().List(i.Id).MaxResults(50).Do()
+		tasks, err := srv.TasksService().List(i.Id).ShowCompleted(false).MaxResults(50).Do()
 		if err != nil {
 			return errors.Wrap(err, "Unable to retrieve tasks")
 		}
