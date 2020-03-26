@@ -16,7 +16,7 @@ require (
 	github.com/olekukonko/tablewriter v0.0.4
 	github.com/pelletier/go-toml v1.4.0 // indirect
 	github.com/pkg/errors v0.9.1
-	github.com/urfave/cli v1.22.2
+	github.com/urfave/cli v1.22.3
 	github.com/y-yagi/cacher v0.2.0
 	github.com/y-yagi/configure v0.2.0
 	github.com/y-yagi/goext v0.4.0 // indirect
