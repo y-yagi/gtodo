@@ -12,6 +12,8 @@ import (
 	tasks "google.golang.org/api/tasks/v1"
 )
 
+const timeFormat = "2006-01-02"
+
 func addTask(c *cli.Context) error {
 	srv, err := gtodo.NewService()
 	if err != nil {
@@ -203,7 +205,7 @@ func buildTask(task *tasks.Task) error {
 	prompt.Label = "Due(yyyy-MM-dd)"
 	if len(task.Due) != 0 {
 		time, _ := time.Parse(time.RFC3339, task.Due)
-		due := time.Format("2006-01-02")
+		due := time.Format(timeFormat)
 		prompt.Default = due
 	} else {
 		prompt.Default = ""
@@ -214,7 +216,7 @@ func buildTask(task *tasks.Task) error {
 			return nil
 		}
 
-		_, err := time.Parse("2006-01-02", input)
+		_, err := time.Parse(timeFormat, input)
 		if err != nil {
 			return errors.New("Invalid format")
 		}
@@ -228,7 +230,7 @@ func buildTask(task *tasks.Task) error {
 	}
 
 	if len(due) != 0 {
-		t, _ := time.Parse("2006-01-02", due)
+		t, _ := time.Parse(timeFormat, due)
 		task.Due = t.Format(time.RFC3339)
 	}
 
@@ -280,7 +282,7 @@ func notifyTask(c *cli.Context) error {
 			msg += task.Title
 			if task.Due != "" {
 				time, _ := time.Parse(time.RFC3339, task.Due)
-				msg += "(" + time.Format("2006-1-2") + ")"
+				msg += "(" + time.Format(timeFormat) + ")"
 			}
 			msg += "\n"
 		}
