@@ -13,8 +13,8 @@ require (
 	github.com/y-yagi/cacher v0.2.0
 	github.com/y-yagi/configure v0.2.0
 	github.com/y-yagi/goext v0.4.0 // indirect
-	golang.org/x/oauth2 v0.0.0-20210402161424-2e8d93401602
-	google.golang.org/api v0.44.0
+	golang.org/x/oauth2 v0.0.0-20210413134643-5e61552d6c78
+	google.golang.org/api v0.45.0
 )
 
 go 1.16
