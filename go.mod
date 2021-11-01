@@ -11,7 +11,7 @@ require (
 	github.com/y-yagi/configure v0.3.0
 	github.com/y-yagi/goext v0.4.0 // indirect
 	golang.org/x/oauth2 v0.0.0-20211005180243-6b3c2da341f1
-	google.golang.org/api v0.59.0
+	google.golang.org/api v0.60.0
 )
 
 go 1.16
