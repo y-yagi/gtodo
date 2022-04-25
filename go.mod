@@ -6,7 +6,7 @@ require (
 	github.com/manifoldco/promptui v0.9.0
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/pkg/errors v0.9.1
-	github.com/urfave/cli v1.22.5
+	github.com/urfave/cli v1.22.7
 	github.com/y-yagi/cacher v0.2.0
 	github.com/y-yagi/configure v0.3.0
 	github.com/y-yagi/goext v0.4.0 // indirect
