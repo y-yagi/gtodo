@@ -14,4 +14,4 @@ require (
 	google.golang.org/api v0.73.0
 )
 
-go 1.16
+go 1.18
