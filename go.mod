@@ -9,7 +9,7 @@ require (
 	github.com/y-yagi/cacher v0.2.0
 	github.com/y-yagi/configure v0.3.0
 	golang.org/x/oauth2 v0.0.0-20220622183110-fd043fe589d2
-	google.golang.org/api v0.92.0
+	google.golang.org/api v0.93.0
 )
 
 require (
