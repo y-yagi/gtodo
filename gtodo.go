@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -43,7 +42,7 @@ func NewService() (*Service, error) {
 }
 
 func (srv *Service) buildTaskService() error {
-	b, err := ioutil.ReadFile(srv.credentialsPath())
+	b, err := os.ReadFile(srv.credentialsPath())
 	if err != nil {
 		return errors.Wrap(err, "Unable to read client secret file")
 	}
