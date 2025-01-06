@@ -8,7 +8,7 @@ require (
 	github.com/urfave/cli v1.22.16
 	github.com/y-yagi/cacher v0.2.0
 	github.com/y-yagi/configure v0.3.0
-	golang.org/x/oauth2 v0.24.0
+	golang.org/x/oauth2 v0.25.0
 	google.golang.org/api v0.214.0
 )
 
