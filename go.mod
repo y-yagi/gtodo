@@ -8,8 +8,8 @@ require (
 	github.com/urfave/cli v1.22.16
 	github.com/y-yagi/cacher v0.2.0
 	github.com/y-yagi/configure v0.3.0
-	golang.org/x/oauth2 v0.29.0
-	google.golang.org/api v0.230.0
+	golang.org/x/oauth2 v0.30.0
+	google.golang.org/api v0.232.0
 )
 
 require (
@@ -207,7 +207,7 @@ require (
 	golang.org/x/exp/typeparams v0.0.0-20250210185358-939b2ce775ac // indirect
 	golang.org/x/mod v0.24.0 // indirect
 	golang.org/x/net v0.39.0 // indirect
-	golang.org/x/sync v0.13.0 // indirect
+	golang.org/x/sync v0.14.0 // indirect
 	golang.org/x/sys v0.32.0 // indirect
 	golang.org/x/text v0.24.0 // indirect
 	golang.org/x/tools v0.31.0 // indirect
