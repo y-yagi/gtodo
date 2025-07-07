@@ -11,6 +11,8 @@ import (
 	"time"
 
 	"github.com/olekukonko/tablewriter"
+	"github.com/olekukonko/tablewriter/renderer"
+	"github.com/olekukonko/tablewriter/tw"
 	"github.com/pkg/errors"
 	"github.com/urfave/cli"
 	"github.com/y-yagi/gtodo"
@@ -117,11 +119,18 @@ func appRun(c *cli.Context) error {
 				defer wg.Done()
 
 				buf := &bytes.Buffer{}
-				table := tablewriter.NewWriter(buf)
-				table.SetAutoWrapText(false)
-				table.SetHeader([]string{"Title", "Due", "Note"})
-				table.SetBorders(tablewriter.Border{Left: true, Top: false, Right: true, Bottom: false})
-				table.SetCenterSeparator("|")
+				table := tablewriter.NewTable(buf,
+					tablewriter.WithRenderer(renderer.NewBlueprint()),
+					tablewriter.WithRendition(tw.Rendition{
+						Borders: tw.Border{Left: tw.On, Top: tw.Off, Right: tw.On, Bottom: tw.Off},
+						Symbols: tw.NewSymbols(tw.StyleLight),
+						Settings: tw.Settings{
+							Separators: tw.Separators{BetweenColumns: tw.On},
+						},
+					}),
+					tablewriter.WithRowAutoWrap(tw.WrapNone),
+				)
+				table.Header("Title", "Due", "Note")
 
 				tasks, err := srv.Tasks(item.Id)
 				if err != nil {
@@ -149,7 +158,10 @@ func appRun(c *cli.Context) error {
 					table.Append(data)
 				}
 
-				table.Render()
+				if err := table.Render(); err != nil {
+					logger.Printf("Table rendering failed: %v\n", err)
+					return
+				}
 				logger.Print(buf.String() + "\n")
 			}(i)
 		}
