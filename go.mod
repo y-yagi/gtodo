@@ -9,7 +9,7 @@ require (
 	github.com/y-yagi/cacher v0.2.0
 	github.com/y-yagi/configure v0.3.0
 	golang.org/x/oauth2 v0.36.0
-	google.golang.org/api v0.295.0
+	google.golang.org/api v0.297.0
 )
 
 require (
@@ -228,6 +228,6 @@ require (
 	mvdan.cc/unparam v0.0.0-20240528143540-8a5130ca722f // indirect
 )
 
-go 1.25.8
+go 1.26.0
 
 tool github.com/golangci/golangci-lint/cmd/golangci-lint
