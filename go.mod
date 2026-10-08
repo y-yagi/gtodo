@@ -3,7 +3,7 @@ module github.com/y-yagi/gtodo
 require (
 	github.com/0xAX/notificator v0.0.0-20191016112426-3962a5ea8da1
 	github.com/manifoldco/promptui v0.9.0
-	github.com/olekukonko/tablewriter v1.1.4
+	github.com/olekukonko/tablewriter v1.1.5
 	github.com/pkg/errors v0.9.1
 	github.com/urfave/cli v1.22.17
 	github.com/y-yagi/cacher v0.2.0
